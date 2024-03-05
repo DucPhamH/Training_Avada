@@ -1,0 +1,24 @@
+<body>
+  <h2>Product list</h2>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Description</th>
+      <th>Product</th>
+      <th>Color</th>
+      <th>CreatedAt</th>
+    </tr>
+    <% newProducts.forEach((product) => { %>
+    <tr>
+      <td><%= product.name %></td>
+      <td><%= product.price %></td>
+      <td><%= product.description %></td>
+      <td><%= product.product %></td>
+      <td><%= product.color %></td>
+      <td><%= product.createdAt %></td>
+    </tr>
+    <% }) %>
+  </table>
+</body>
