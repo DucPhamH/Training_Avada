@@ -5,7 +5,7 @@ const { data: products } = require("./products.json");
  *
  * @returns {[{name: string, price: number, description: string, product: string, color: string, createdAt: string, image: string}, {name: string, price: number, description: string, product: string, color: string, createdAt: string, image: string}, {name: string, price: number, description: string, product: string, color: string, createdAt: string, image: string}, {name: string, price: number, description: string, product: string, color: string, createdAt: string, image: string}]}
  */
-function getAll() {
+function getAll({ limit, sort, fields }) {
   //   console.log(products);
   return products;
 }
