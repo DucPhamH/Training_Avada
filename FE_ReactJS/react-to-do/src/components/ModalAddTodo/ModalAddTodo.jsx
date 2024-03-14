@@ -1,57 +1,58 @@
-import {
-  Box,
-  Form,
-  FormLayout,
-  Frame,
-  Modal,
-  TextField,
-} from "@shopify/polaris";
+import { Form, FormLayout, Modal, TextField } from "@shopify/polaris";
 import React, { useCallback, useState } from "react";
 
-export default function ModalAddTodo({ active, handleChange, addTodo }) {
-  const [text, setText] = useState("");
+export default function ModalAddTodo({
+  activeModal,
+  handleCreatedChange = () => {},
+  addTodo = () => {},
+}) {
+  const [input, setInput] = useState({});
+
+  const handleInputChange = useCallback((key, value) => {
+    setInput((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!text) return;
-    addTodo(text);
-    setText("");
-    handleChange();
+    if (!input.name) return;
+    addTodo({
+      name: input.name,
+    });
+    handleCreatedChange();
   };
-  const handleTextChange = useCallback((value) => setText(value), []);
 
   return (
-    <Box>
-      <Frame>
-        <Modal
-          open={active}
-          onClose={handleChange}
-          title="Create todo"
-          size="small"
-          primaryAction={{
-            content: "Add",
-            onAction: handleSubmit,
-          }}
-          secondaryActions={[
-            {
-              content: "Cancel",
-              onAction: handleChange,
-            },
-          ]}
-        >
-          <Modal.Section>
-            <Form onSubmit={handleSubmit}>
-              <FormLayout>
-                <TextField
-                  value={text}
-                  onChange={handleTextChange}
-                  label="Title"
-                  type="text"
-                />
-              </FormLayout>
-            </Form>
-          </Modal.Section>
-        </Modal>
-      </Frame>
-    </Box>
+    <Modal
+      open={activeModal}
+      onClose={handleCreatedChange}
+      title="Create todo"
+      size="small"
+      primaryAction={{
+        content: "Add",
+        onAction: handleSubmit,
+      }}
+      secondaryActions={[
+        {
+          content: "Cancel",
+          onAction: handleCreatedChange,
+        },
+      ]}
+    >
+      <Modal.Section>
+        <Form onSubmit={handleSubmit}>
+          <FormLayout>
+            <TextField
+              value={input.name}
+              onChange={(val) => handleInputChange("name", val)}
+              label="Title"
+              type="text"
+            />
+          </FormLayout>
+        </Form>
+      </Modal.Section>
+    </Modal>
   );
 }

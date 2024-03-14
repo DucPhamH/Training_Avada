@@ -4,13 +4,7 @@ async function productInputMiddleware(ctx, next) {
   try {
     const postData = ctx.request.body;
     let schema = yup.object().shape({
-      id: yup.number().positive().integer().required(),
       name: yup.string().required(),
-      price: yup.number().positive().required(),
-      description: yup.string().required(),
-      product: yup.string().required(),
-      color: yup.string().required(),
-      image: yup.string().required(),
     });
 
     await schema.validate(postData);
@@ -30,12 +24,8 @@ async function productUpdateMiddleware(ctx, next) {
     const postData = ctx.request.body;
     let schema = yup.object().shape({
       id: yup.number().positive().integer(),
-      name: yup.string().required(),
-      price: yup.number().positive(),
-      description: yup.string(),
-      product: yup.string(),
-      color: yup.string(),
-      image: yup.string(),
+      name: yup.string(),
+      isDone: yup.boolean(),
     });
 
     await schema.validate(postData);

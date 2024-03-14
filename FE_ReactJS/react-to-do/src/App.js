@@ -1,13 +1,14 @@
 import React from "react";
 import "./App.css";
-import MainLayout from "./layouts/MainLayout";
 import TodoPage from "./pages/TodoPage";
+import Header from "./components/Header";
 
 function App() {
   return (
-    <MainLayout>
+    <>
+      <Header />
       <TodoPage />
-    </MainLayout>
+    </>
   );
 }
 

@@ -22,5 +22,8 @@ router.get("/products/:id", productHandler.getProduct);
 router.post("/products", productInputMiddleware, productHandler.save);
 router.delete("/products/:id", productHandler.removeOne);
 router.put("/products/:id", productUpdateMiddleware, productHandler.updateOne);
+router.post("/removeManyProducts", productHandler.removeMany);
+router.put("/completeManyProducts", productHandler.completeMany);
+router.put("/incompleteManyProducts", productHandler.incompleteMany);
 
 module.exports = router;

@@ -1,51 +1,83 @@
-import React, { useCallback, useContext, useState } from "react";
-import TodoForm from "../../components/TodoForm";
-import { Box } from "@shopify/polaris";
-import Todo from "../../components/Todo";
+import React, { useCallback, useState } from "react";
+import { Page } from "@shopify/polaris";
 import ModalAddTodo from "../../components/ModalAddTodo";
-import { AppContext } from "../../context/appContext";
+import TodoList from "../../components/TodoList";
+
+import useFetchApi from "../../hooks/useFetchApi";
+import { fetchApi } from "../../config/api";
 
 export default function TodoPage() {
-  const { todos, setTodos } = useContext(AppContext);
+  const { data: todos } = useFetchApi("/products");
 
-  const addTodo = (text) => {
-    const newTodos = [
-      ...todos,
-      { id: Date.now(), text: text, isCompleted: false },
-    ];
-    console.log(newTodos);
-    setTodos(newTodos);
+  const [activeModal, setActiveModal] = useState(false);
+
+  const handleCreatedChange = useCallback(
+    () => setActiveModal(!activeModal),
+    [activeModal]
+  );
+
+  const addTodo = async (value) => {
+    try {
+      console.log(value);
+      const data = {
+        name: value.name,
+      };
+      await fetchApi({
+        method: "POST",
+        endpoint: "/products",
+        data: data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const completeTodo = (id) => {
-    const newTodos = [...todos];
-    const todo = newTodos.find((todo) => todo.id === id);
-    todo.isCompleted = true;
-    setTodos(newTodos);
+  const completeOneTodo = async (id) => {
+    try {
+      const data = {
+        isDone: true,
+      };
+      await fetchApi({
+        method: "PUT",
+        endpoint: `/products/${id}`,
+        data: data,
+      });
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const removeTodo = (id) => {
-    const newTodos = [...todos];
-    const todoIndex = newTodos.findIndex((todo) => todo.id === id);
-    newTodos.splice(todoIndex, 1);
-    setTodos(newTodos);
+  const removeOneTodo = async (id) => {
+    try {
+      await fetchApi({
+        method: "DELETE",
+        endpoint: `/products/${id}`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const [active, setActive] = useState(false);
-  const handleChange = useCallback(() => setActive(!active), [active]);
   return (
-    <>
-      <Box>
-        <TodoForm handleChange={handleChange} />
-        <Box style={{ marginRight: "18rem", marginLeft: "18rem" }}>
-          <Todo completeTodo={completeTodo} removeTodo={removeTodo} />
-        </Box>
-      </Box>
+    <Page
+      title="Todoes"
+      primaryAction={{
+        content: "Create",
+        onAction: handleCreatedChange,
+      }}
+    >
+      <TodoList
+        todos={todos}
+        completeOneTodo={completeOneTodo}
+        removeOneTodo={removeOneTodo}
+      />
+
       <ModalAddTodo
         addTodo={addTodo}
-        active={active}
-        handleChange={handleChange}
+        activeModal={activeModal}
+        handleCreatedChange={handleCreatedChange}
       />
-    </>
+    </Page>
   );
 }

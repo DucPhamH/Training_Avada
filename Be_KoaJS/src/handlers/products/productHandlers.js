@@ -4,6 +4,9 @@ const {
   add: addProduct,
   update: updateProduct,
   remove: removeProduct,
+  removeMany: removeManyProduct,
+  completeMany: completeManyProduct,
+  incompleteMany: incompleteManyProduct,
 } = require("../../database/productRepository");
 
 /**
@@ -16,46 +19,11 @@ async function getProducts(ctx) {
     let limit = ctx.query.limit;
     let sort = ctx.query.sort;
     let fields = ctx.query.fields;
-    // console.log(limit, sort);
-    const products = getAllProducts();
-    if (!limit) {
-      limit = 10;
-    }
-    if (!sort) {
-      sort = "asc";
-    }
-    console.log(limit, sort);
-    //sort theo thời gian createdAt
-    if (sort === "asc") {
-      products.sort((a, b) => {
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      });
-    } else {
-      products.sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-    }
-    //lấy ra các field cần lấy
-    const newProduct = [];
-    if (fields) {
-      const fieldsArray = fields.split(",");
-      const newProductfields = products.map((product) => {
-        const newProduct = {};
-        fieldsArray.forEach((field) => {
-          newProduct[field] = product[field];
-        });
-        return newProduct;
-      });
-      newProduct.push(newProductfields);
-    }
-    console.log(newProduct);
-    //limit số lượng sản phẩm
-    const newProducts =
-      newProduct.length > 0
-        ? newProduct.flat().slice(0, limit)
-        : products.slice(0, limit);
 
-    await ctx.render("product", { newProducts });
+    const products = getAllProducts(limit, sort, fields);
+    return (ctx.body = {
+      data: products,
+    });
   } catch (e) {
     ctx.status = 404;
     ctx.body = {
@@ -99,7 +67,12 @@ async function getProduct(ctx) {
 async function save(ctx) {
   try {
     const postData = ctx.request.body;
-    const newPostData = { ...postData, createdAt: new Date().toISOString() };
+    const newPostData = {
+      ...postData,
+      id: parseInt(new Date().getTime() / 1000),
+      isDone: false,
+      createdAt: new Date().toISOString(),
+    };
     addProduct(newPostData);
 
     ctx.status = 201;
@@ -160,10 +133,63 @@ async function removeOne(ctx) {
     });
   }
 }
+
+async function removeMany(ctx) {
+  try {
+    const objID = ctx.request.body;
+    console.log(objID);
+    removeManyProduct(objID);
+    ctx.status = 200;
+    return (ctx.body = {
+      success: true,
+    });
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+}
+
+async function completeMany(ctx) {
+  try {
+    const objID = ctx.request.body;
+    completeManyProduct(objID);
+    ctx.status = 200;
+    return (ctx.body = {
+      success: true,
+    });
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+}
+
+async function incompleteMany(ctx) {
+  try {
+    const objID = ctx.request.body;
+    incompleteManyProduct(objID);
+    ctx.status = 200;
+    return (ctx.body = {
+      success: true,
+    });
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+}
+
 module.exports = {
   getProducts,
   getProduct,
   save,
   updateOne,
   removeOne,
+  removeMany,
+  completeMany,
+  incompleteMany,
 };

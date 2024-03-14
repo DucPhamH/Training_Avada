@@ -110,7 +110,7 @@ export default function Header() {
   );
 
   return (
-    <div style={{ height: "250px" }}>
+    <div style={{ height: "6rem" }}>
       <Frame topBar={topBarMarkup} logo={logo} />
     </div>
   );

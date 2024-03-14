@@ -1,8 +1,7 @@
 import { createContext, useState } from "react";
-import { intialData } from "../constant/data";
 
 const initialAppContext = {
-  todos: intialData,
+  todos: [],
   setTodos: () => null,
 };
 

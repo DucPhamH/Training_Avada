@@ -2,27 +2,22 @@ const { faker } = require("@faker-js/faker");
 const fs = require("fs");
 function createRandomUser(id) {
   const product = faker.commerce.product();
-  const price = faker.commerce.price();
-  const description = faker.lorem.sentence();
-  const color = faker.lorem.sentence();
+
   const createdAt = faker.date.past();
-  const image = faker.image.avatar();
+
+  const isDone = false;
 
   return {
     id,
     name: product,
-    price,
-    description,
-    product,
-    color,
     createdAt,
-    image,
+    isDone,
   };
 }
 function createRandomUsers(count) {
   return Array.from({ length: count }, (_, i) => createRandomUser(i + 1));
 }
-const createUser = createRandomUsers(1000);
+const createUser = createRandomUsers(6);
 
 fs.writeFileSync(
   "src/database/products.json",

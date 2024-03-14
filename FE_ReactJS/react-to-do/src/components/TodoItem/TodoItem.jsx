@@ -1,12 +1,12 @@
-import { Badge, Box, Button, Text } from "@shopify/polaris";
+import { Badge, Button, InlineStack, Text } from "@shopify/polaris";
 import React from "react";
 
 export default function TodoItem({
   id,
   text,
   isCompleted,
-  completeTodo,
-  removeTodo,
+  completeOneTodo = () => {},
+  removeOneTodo = () => {},
 }) {
   const checkComplete = () => {
     if (isCompleted) {
@@ -16,29 +16,17 @@ export default function TodoItem({
     }
   };
   return (
-    <Box
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <InlineStack align="space-between" blockAlign="center">
       <Text variant="bodyMd" fontWeight="bold" as="h3">
         {text}
       </Text>
-      <Box
-        style={{
-          display: "flex",
-          gap: "1rem",
-          alignItems: "center",
-        }}
-      >
+      <InlineStack blockAlign="center" gap="200">
         {checkComplete()}
-        <Button onClick={() => completeTodo(id)}>Complete</Button>
-        <Button onClick={() => removeTodo(id)} tone="critical">
+        <Button onClick={() => completeOneTodo(id)}>Complete</Button>
+        <Button onClick={() => removeOneTodo(id)} tone="critical">
           Delete
         </Button>
-      </Box>
-    </Box>
+      </InlineStack>
+    </InlineStack>
   );
 }

@@ -4,6 +4,7 @@ const routes = require("./routes/routes.js");
 const render = require("koa-ejs");
 const path = require("path");
 const app = new Koa();
+const cors = require("@koa/cors");
 
 render(app, {
   root: path.join(__dirname, "view"),
@@ -12,6 +13,7 @@ render(app, {
   cache: false,
   debug: true,
 });
+app.use(cors());
 app.use(koaBody());
 app.use(routes.routes());
 app.use(routes.allowedMethods());
