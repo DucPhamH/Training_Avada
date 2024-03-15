@@ -21,6 +21,10 @@ export default function ModalAddTodo({
     addTodo({
       name: input.name,
     });
+    setInput((prev) => ({
+      ...prev,
+      name: "",
+    }));
     handleCreatedChange();
   };
 

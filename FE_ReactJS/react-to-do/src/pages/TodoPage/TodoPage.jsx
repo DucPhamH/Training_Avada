@@ -7,7 +7,7 @@ import useFetchApi from "../../hooks/useFetchApi";
 import { fetchApi } from "../../config/api";
 
 export default function TodoPage() {
-  const { data: todos } = useFetchApi("/products");
+  const { data: todos, setData } = useFetchApi("/products");
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -22,11 +22,17 @@ export default function TodoPage() {
       const data = {
         name: value.name,
       };
-      await fetchApi({
+
+      const res = await fetchApi({
         method: "POST",
         endpoint: "/products",
         data: data,
       });
+      if (res.success === true) {
+        setData(res.data);
+      }
+
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -37,12 +43,14 @@ export default function TodoPage() {
       const data = {
         isDone: true,
       };
-      await fetchApi({
+      const res = await fetchApi({
         method: "PUT",
         endpoint: `/products/${id}`,
         data: data,
       });
-      // console.log(res);
+      if (res.success === true) {
+        setData(res.data);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -50,10 +58,13 @@ export default function TodoPage() {
 
   const removeOneTodo = async (id) => {
     try {
-      await fetchApi({
+      const res = await fetchApi({
         method: "DELETE",
         endpoint: `/products/${id}`,
       });
+      if (res.success === true) {
+        setData(res.data);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -68,6 +79,7 @@ export default function TodoPage() {
       }}
     >
       <TodoList
+        setData={setData}
         todos={todos}
         completeOneTodo={completeOneTodo}
         removeOneTodo={removeOneTodo}

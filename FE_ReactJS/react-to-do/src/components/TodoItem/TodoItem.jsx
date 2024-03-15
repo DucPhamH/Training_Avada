@@ -8,12 +8,12 @@ export default function TodoItem({
   completeOneTodo = () => {},
   removeOneTodo = () => {},
 }) {
-  const checkComplete = () => {
+  const StatusBadge = () => {
     if (isCompleted) {
       return <Badge status="success">Complete</Badge>;
-    } else {
-      return <Badge tone="attention">Incomplete</Badge>;
     }
+
+    return <Badge tone="attention">Incomplete</Badge>;
   };
   return (
     <InlineStack align="space-between" blockAlign="center">
@@ -21,7 +21,7 @@ export default function TodoItem({
         {text}
       </Text>
       <InlineStack blockAlign="center" gap="200">
-        {checkComplete()}
+        <StatusBadge />
         <Button onClick={() => completeOneTodo(id)}>Complete</Button>
         <Button onClick={() => removeOneTodo(id)} tone="critical">
           Delete

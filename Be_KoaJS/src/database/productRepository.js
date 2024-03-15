@@ -55,12 +55,13 @@ function getOne(id) {
  */
 function add(data) {
   const updatedProducts = [data, ...products];
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 /**
@@ -73,12 +74,13 @@ function remove(id) {
     (product) => parseInt(product.id) !== parseInt(id)
   );
 
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 /**
@@ -92,12 +94,13 @@ function update(id, data) {
     }
     return product;
   });
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 function removeMany(objID) {
@@ -106,12 +109,13 @@ function removeMany(objID) {
     (product) => !objID.selectedItems.includes(parseInt(product.id))
   );
 
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 function completeMany(objID) {
@@ -123,12 +127,13 @@ function completeMany(objID) {
     return product;
   });
 
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 function incompleteMany(objID) {
@@ -140,12 +145,13 @@ function incompleteMany(objID) {
     return product;
   });
 
-  return fs.writeFileSync(
+  fs.writeFileSync(
     "./src/database/products.json",
     JSON.stringify({
       data: updatedProducts,
     })
   );
+  return updatedProducts;
 }
 
 module.exports = {

@@ -73,11 +73,12 @@ async function save(ctx) {
       isDone: false,
       createdAt: new Date().toISOString(),
     };
-    addProduct(newPostData);
+    const newPostDatas = addProduct(newPostData);
 
     ctx.status = 201;
     return (ctx.body = {
       success: true,
+      data: newPostDatas,
     });
   } catch (e) {
     return (ctx.body = {
@@ -97,11 +98,12 @@ async function updateOne(ctx) {
     const { id } = ctx.params;
     const postData = ctx.request.body;
     const newPostData = { ...postData, createdAt: new Date().toISOString() };
-    updateProduct(id, newPostData);
+    const newProducts = updateProduct(id, newPostData);
 
     ctx.status = 200;
     return (ctx.body = {
       success: true,
+      data: newProducts,
     });
   } catch (e) {
     return (ctx.body = {
@@ -120,11 +122,12 @@ async function updateOne(ctx) {
 async function removeOne(ctx) {
   try {
     const { id } = ctx.params;
-    removeProduct(id);
+    const newProducts = removeProduct(id);
 
     ctx.status = 200;
     return (ctx.body = {
       success: true,
+      data: newProducts,
     });
   } catch (e) {
     return (ctx.body = {
@@ -138,10 +141,11 @@ async function removeMany(ctx) {
   try {
     const objID = ctx.request.body;
     console.log(objID);
-    removeManyProduct(objID);
+    const newProducts = removeManyProduct(objID);
     ctx.status = 200;
     return (ctx.body = {
       success: true,
+      data: newProducts,
     });
   } catch (e) {
     return (ctx.body = {
@@ -154,10 +158,11 @@ async function removeMany(ctx) {
 async function completeMany(ctx) {
   try {
     const objID = ctx.request.body;
-    completeManyProduct(objID);
+    const newProducts = completeManyProduct(objID);
     ctx.status = 200;
     return (ctx.body = {
       success: true,
+      data: newProducts,
     });
   } catch (e) {
     return (ctx.body = {
@@ -170,10 +175,11 @@ async function completeMany(ctx) {
 async function incompleteMany(ctx) {
   try {
     const objID = ctx.request.body;
-    incompleteManyProduct(objID);
+    const newProducts = incompleteManyProduct(objID);
     ctx.status = 200;
     return (ctx.body = {
       success: true,
+      data: newProducts,
     });
   } catch (e) {
     return (ctx.body = {

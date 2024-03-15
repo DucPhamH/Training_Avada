@@ -5,6 +5,7 @@ import { fetchApi } from "../../config/api";
 
 export default function TodoList({
   todos,
+  setData = () => {},
   completeOneTodo = () => {},
   removeOneTodo = () => {},
 }) {
@@ -20,6 +21,10 @@ export default function TodoList({
         data: objID,
       });
       console.log(res);
+      if (res.success === true) {
+        console.log(res);
+        setData(res.data);
+      }
       setSelectedItems([]);
       // window.location.reload();
     } catch (err) {
@@ -35,7 +40,10 @@ export default function TodoList({
         endpoint: `/completeManyProducts`,
         data: objID,
       });
-      console.log(res);
+      if (res.success === true) {
+        console.log(res);
+        setData(res.data);
+      }
       setSelectedItems([]);
       // window.location.reload();
     } catch (err) {
@@ -51,7 +59,11 @@ export default function TodoList({
         endpoint: `/incompleteManyProducts`,
         data: objID,
       });
-      console.log(res);
+
+      if (res.success === true) {
+        console.log(res);
+        setData(res.data);
+      }
       setSelectedItems([]);
     } catch (err) {
       console.log(err);

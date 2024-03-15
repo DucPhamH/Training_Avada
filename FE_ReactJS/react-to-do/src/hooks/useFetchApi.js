@@ -4,6 +4,7 @@ import { URL } from "../config/api";
 export default function useFetchApi(endpoint) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const url = `${URL.BASE_URL}${endpoint}`;
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function useFetchApi(endpoint) {
         const finalRes = await res.json();
         setData(finalRes.data);
         setLoading(false);
+        setIsFetching(true);
       } catch (err) {
         console.log("Error");
       }
@@ -26,5 +28,5 @@ export default function useFetchApi(endpoint) {
     getData();
   }, [url]);
 
-  return { loading, data };
+  return { loading, data, isFetching, setData };
 }
