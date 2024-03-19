@@ -110,6 +110,7 @@ async function completeMany(data) {
   data.forEach(async (id) => {
     await db.collection("Product").doc(id).update({
       is_done: true,
+      update_At: FieldValue.serverTimestamp(),
     });
   });
   return true;
@@ -124,6 +125,7 @@ async function incompleteMany(data) {
   data.forEach(async (id) => {
     await db.collection("Product").doc(id).update({
       is_done: false,
+      update_At: FieldValue.serverTimestamp(),
     });
   });
   return true;
