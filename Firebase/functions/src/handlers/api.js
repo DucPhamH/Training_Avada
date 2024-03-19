@@ -13,7 +13,8 @@ function hybridBodyParser(opts) {
 const app = new Koa();
 
 app.use(hybridBodyParser());
-app.use(koaBody());
+// app.use(koaBody());
 app.use(routes.routes());
 app.use(routes.allowedMethods());
+app.listen(5000);
 module.exports = app;
