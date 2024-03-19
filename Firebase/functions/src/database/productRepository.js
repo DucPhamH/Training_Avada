@@ -81,6 +81,10 @@ async function updateOne({ id, data }) {
  * @returns {{name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}
  */
 async function removeOne(id) {
+  const findProduct = await db.collection("Product").doc(id).get();
+  if (!findProduct.exists) {
+    return null;
+  }
   const product = await db.collection("Product").doc(id).delete();
   return product;
 }

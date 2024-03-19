@@ -19,7 +19,7 @@ async function getProducts(ctx) {
     const { limit, sort, fields } = ctx.query;
     const products = await getAll({ limit, sort, fields });
     return (ctx.body = {
-      products,
+      data: products,
     });
   } catch (e) {
     ctx.status = 404;
@@ -34,15 +34,18 @@ async function getProducts(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{products: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
+ * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function getOneProduct(ctx) {
   try {
     const { id } = ctx.params;
     const products = await getOne(id);
-    return (ctx.body = {
-      products,
-    });
+    if (products) {
+      return (ctx.body = {
+        data: products,
+      });
+    }
+    throw new Error("Product Not Found with that id!");
   } catch (e) {
     ctx.status = 404;
     ctx.body = {
@@ -56,7 +59,7 @@ async function getOneProduct(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
+ * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function addProduct(ctx) {
   try {
@@ -64,7 +67,7 @@ async function addProduct(ctx) {
     console.log(productData);
     const products = await addOne(productData);
     return (ctx.body = {
-      products,
+      data: products,
     });
   } catch (e) {
     ctx.status = 404;
@@ -79,7 +82,7 @@ async function addProduct(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
+ * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function updateProduct(ctx) {
   try {
@@ -87,7 +90,7 @@ async function updateProduct(ctx) {
     const productData = ctx.request.body;
     const products = await updateOne({ id, data: productData });
     return (ctx.body = {
-      products,
+      data: products,
     });
   } catch (e) {
     ctx.status = 404;
@@ -102,15 +105,18 @@ async function updateProduct(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
+ * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function deleteOneProduct(ctx) {
   try {
     const { id } = ctx.params;
     const products = await removeOne(id);
-    return (ctx.body = {
-      products,
-    });
+    if (products) {
+      return (ctx.body = {
+        data: products,
+      });
+    }
+    throw new Error("Product Not Found with that id!");
   } catch (e) {
     ctx.status = 404;
     ctx.body = {
@@ -129,9 +135,10 @@ async function deleteOneProduct(ctx) {
 async function deleteManyProducts(ctx) {
   try {
     const { data } = ctx.request.body;
-    const products = await deleteMany(data);
+    const res = await deleteMany(data);
+    ctx.status = 201;
     return (ctx.body = {
-      products,
+      success: res,
     });
   } catch (e) {
     ctx.status = 404;
@@ -151,9 +158,10 @@ async function deleteManyProducts(ctx) {
 async function completeManyProducts(ctx) {
   try {
     const { data } = ctx.request.body;
-    const products = await completeMany(data);
+    const res = await completeMany(data);
+    ctx.status = 201;
     return (ctx.body = {
-      products,
+      success: res,
     });
   } catch (e) {
     ctx.status = 404;
@@ -173,9 +181,10 @@ async function completeManyProducts(ctx) {
 async function incompleteManyProducts(ctx) {
   try {
     const { data } = ctx.request.body;
-    const products = await incompleteMany(data);
+    const res = await incompleteMany(data);
+    ctx.status = 201;
     return (ctx.body = {
-      products,
+      success: res,
     });
   } catch (e) {
     ctx.status = 404;
