@@ -34,7 +34,7 @@ async function getProducts(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
+ * @returns {Promise<{data: {name: string, price: number, isCompelete: boolean, createAt: Date, updateAt: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function getOneProduct(ctx) {
   try {
@@ -59,7 +59,7 @@ async function getOneProduct(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
+ * @returns {Promise<{data: {name: string, price: number, isCompelete: boolean, createAt: Date, updateAt: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
 async function addProduct(ctx) {
   try {
@@ -82,15 +82,15 @@ async function addProduct(ctx) {
 /**
  *
  * @param ctx
- * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
+ * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
  */
 async function updateProduct(ctx) {
   try {
     const { id } = ctx.params;
     const productData = ctx.request.body;
-    const products = await updateOne({ id, data: productData });
+    const res = await updateOne({ id, data: productData });
     return (ctx.body = {
-      data: products,
+      success: res,
     });
   } catch (e) {
     ctx.status = 404;
@@ -102,30 +102,30 @@ async function updateProduct(ctx) {
   }
 }
 
-/**
- *
- * @param ctx
- * @returns {Promise<{data: {name: string, price: number, is_done: boolean, create_At: Date, update_At: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
- */
-async function deleteOneProduct(ctx) {
-  try {
-    const { id } = ctx.params;
-    const products = await removeOne(id);
-    if (products) {
-      return (ctx.body = {
-        data: products,
-      });
-    }
-    throw new Error("Product Not Found with that id!");
-  } catch (e) {
-    ctx.status = 404;
-    ctx.body = {
-      success: false,
-      data: [],
-      error: e.message,
-    };
-  }
-}
+// /**
+//  *
+//  * @param ctx
+//  * @returns {Promise<{data: {name: string, price: number, isCompelete: boolean, createAt: Date, updateAt: Date}}|{success: boolean, error: *}|{message: string, status: string}>}
+//  */
+// async function deleteOneProduct(ctx) {
+//   try {
+//     const { id } = ctx.params;
+//     const products = await removeOne(id);
+//     if (products) {
+//       return (ctx.body = {
+//         data: products,
+//       });
+//     }
+//     throw new Error("Product Not Found with that id!");
+//   } catch (e) {
+//     ctx.status = 404;
+//     ctx.body = {
+//       success: false,
+//       data: [],
+//       error: e.message,
+//     };
+//   }
+// }
 
 /**
  *
@@ -157,8 +157,12 @@ async function deleteManyProducts(ctx) {
  */
 async function completeManyProducts(ctx) {
   try {
-    const { data } = ctx.request.body;
-    const res = await completeMany(data);
+    //  VD data gửi có dạng {
+    //         arrayID : [1,2,3,4],
+    //         isCompelete: true
+    //   }
+    const { arrayID, isCompelete } = ctx.request.body;
+    const res = await completeMany(arrayID, isCompelete);
     ctx.status = 201;
     return (ctx.body = {
       success: res,
@@ -173,35 +177,33 @@ async function completeManyProducts(ctx) {
   }
 }
 
-/**
- *
- * @param ctx
- * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
- */
-async function incompleteManyProducts(ctx) {
-  try {
-    const { data } = ctx.request.body;
-    const res = await incompleteMany(data);
-    ctx.status = 201;
-    return (ctx.body = {
-      success: res,
-    });
-  } catch (e) {
-    ctx.status = 404;
-    ctx.body = {
-      success: false,
-      data: [],
-      error: e.message,
-    };
-  }
-}
+// /**
+//  *
+//  * @param ctx
+//  * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
+//  */
+// async function incompleteManyProducts(ctx) {
+//   try {
+//     const { data } = ctx.request.body;
+//     const res = await incompleteMany(data);
+//     ctx.status = 201;
+//     return (ctx.body = {
+//       success: res,
+//     });
+//   } catch (e) {
+//     ctx.status = 404;
+//     ctx.body = {
+//       success: false,
+//       data: [],
+//       error: e.message,
+//     };
+//   }
+// }
 module.exports = {
   getProducts,
   getOneProduct,
   addProduct,
   updateProduct,
-  deleteOneProduct,
   deleteManyProducts,
   completeManyProducts,
-  incompleteManyProducts,
 };

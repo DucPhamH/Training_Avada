@@ -26,7 +26,7 @@ async function productUpdateMiddleware(ctx, next) {
     let schema = yup.object().shape({
       name: yup.string(),
       price: yup.number(),
-      is_done: yup.boolean(),
+      isCompelete: yup.boolean(),
     });
 
     await schema.validate(productData);

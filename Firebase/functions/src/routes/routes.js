@@ -4,10 +4,8 @@ const {
   getProducts,
   addProduct,
   updateProduct,
-  deleteOneProduct,
   deleteManyProducts,
   completeManyProducts,
-  incompleteManyProducts,
   getOneProduct,
 } = require("../handlers/productHandler");
 const {
@@ -22,9 +20,9 @@ router.get("/products", getProducts);
 router.get("/products/:id", getOneProduct);
 router.post("/products", productInputMiddleware, addProduct);
 router.put("/products/:id", productUpdateMiddleware, updateProduct);
-router.delete("/products/:id", deleteOneProduct);
+// router.delete("/products/:id", deleteOneProduct);
 router.post("/products/many/deleteMany", deleteManyProducts);
 router.post("/products/many/completeMany", completeManyProducts);
-router.post("/products/many/incompleteMany", incompleteManyProducts);
+// router.post("/products/many/incompleteMany", incompleteManyProducts);
 
 module.exports = router;
